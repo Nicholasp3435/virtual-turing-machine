@@ -1,0 +1,1 @@
+I'm attempting to implement a finite Turing Machine in C cause i kinda like c ig
