@@ -104,11 +104,6 @@ char* extract(char* line, unsigned char preceding) {
     return data;
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
 char** extract_set(const char* line, unsigned char preceding, unsigned long* count) {
     *count = 0;
     char** elements = NULL;
@@ -196,12 +191,10 @@ void add_transition(TuringMachine* TM, const char* line, unsigned long* count) {
     t.next_state = next_state;
 
     if (*ptr == ',') ptr++;
-    while (isspace(*ptr)) ptr++;
 
     t.write_symbol = *ptr++;
 
     if (*ptr == ',') ptr++;
-    while (isspace(*ptr)) ptr++;
 
     switch (*ptr) {
         case 'L': t.move = LEFT; break;
