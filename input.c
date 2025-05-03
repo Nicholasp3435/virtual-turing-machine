@@ -157,7 +157,9 @@ void add_transition(TuringMachine* TM, const char* line, unsigned long* count) {
     Transition t = {0};
 
     const char* ptr = strchr(line, '(');
-    if (!ptr) return;
+    if (!ptr) {
+        return;
+    }
     ptr++; // skip '('
 
     char* curr_state = NULL;
@@ -190,11 +192,15 @@ void add_transition(TuringMachine* TM, const char* line, unsigned long* count) {
     next_state[next_len] = '\0';
     t.next_state = next_state;
 
-    if (*ptr == ',') ptr++;
+    if (*ptr == ',') {
+        ptr++;
+    }
 
     t.write_symbol = *ptr++;
 
-    if (*ptr == ',') ptr++;
+    if (*ptr == ',') {
+        ptr++;
+    }
 
     switch (*ptr) {
         case 'L': t.move = LEFT; break;
