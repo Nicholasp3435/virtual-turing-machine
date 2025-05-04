@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define VERBOSE true
+#define VERBOSE false
 
 void print_str_arr(char** strings, unsigned long num_strings) {
     printf("{");

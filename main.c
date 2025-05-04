@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "input.h"
 
 typedef struct {
@@ -73,6 +74,10 @@ void move_left(Tape* tape) {
     }
 }
 
+void stay(Tape* tape) {
+    // why did I make this function lol?
+}
+
 void load_input(Tape* tape, const char* input) {
     unsigned long len = strlen(input);
     if (len > tape->capacity) {
@@ -85,13 +90,54 @@ void load_input(Tape* tape, const char* input) {
 }
 
 void print_tape(Tape* tape) {
+    printf("State: %s\t", tape->cur_state);
     for (unsigned long i = 0; i < tape->capacity; i++) {
         if (i == tape->head)
             printf("[%c]", tape->cells[i]);
         else
             printf(" %c ", tape->cells[i]);
     }
-    printf("\nState: %s\n", tape->cur_state);
+    printf("\n");
+}
+
+void run_turing_machine(TuringMachine* TM, Tape* tape) {
+    while (1) {
+        char symbol = read_symbol(tape);
+        bool matched = false;
+
+        for (int i = 0; i < TM->num_transitions; i++) {
+            Transition t = TM->transitions[i];
+
+            if (strcmp(t.current_state, tape->cur_state) == 0 && t.read_symbol == symbol) {
+                // Apply transition
+                write_symbol(tape, t.write_symbol);
+                tape->cur_state = t.next_state; 
+
+                (t.move == LEFT) ? move_left(tape) :
+                (t.move == RIGHT) ? move_right(tape) : stay(tape);
+
+                matched = true;
+                break;
+            }
+        }
+
+        print_tape(tape);
+
+        if (!matched) {
+            printf("No matching transition. Halting.\n");
+            break;
+        }
+
+        // Check if in accept state
+        for (int j = 0; j < TM->num_accept_states; j++) {
+            if (strcmp(tape->cur_state, TM->accept_states[j]) == 0) {
+                printf("Machine accepted input.\n");
+                return;
+            }
+        }
+    }
+
+    printf("Machine rejected input.\n");
 }
 
 int main(int argc, char** argv) {
@@ -100,6 +146,9 @@ int main(int argc, char** argv) {
     Tape* tape = init_tape(16, *TM->blank_symbol, TM->start_state);
     load_input(tape, argv[2]);
     print_tape(tape);
+
+    run_turing_machine(TM, tape);
+
 
     return EXIT_SUCCESS;
 }

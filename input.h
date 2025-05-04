@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-typedef enum { LEFT, RIGHT } Direction;
+typedef enum { LEFT, RIGHT, STAY } Direction;
 
 typedef struct {
     char* current_state;
