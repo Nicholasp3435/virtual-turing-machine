@@ -94,54 +94,12 @@ void print_tape(Tape* tape) {
     printf("\nState: %s\n", tape->cur_state);
 }
 
-void run_turing_machine(TuringMachine* TM, Tape* tape) {
-    while (1) {
-        char sym = read_symbol(tape);
-        int matched = 0;
-
-        for (int i = 0; i < TM->num_transitions; i++) {
-            Transition t = TM->transitions[i];
-
-            if (strcmp(t.current_state, tape->cur_state) == 0 && t.read_symbol == sym) {
-                // Apply transition
-                write_symbol(tape, t.write_symbol);
-                tape->cur_state = t.next_state; // or strdup(...) if needed
-                if (t.move == LEFT) move_left(tape);
-                else move_right(tape);
-
-                matched = 1;
-                break;
-            }
-        }
-
-        print_tape(tape);
-
-        if (!matched) {
-            printf("No matching transition. Halting.\n");
-            break;
-        }
-
-        // Check if in accept state
-        for (int j = 0; j < TM->num_accept_states; j++) {
-            if (strcmp(tape->cur_state, TM->accept_states[j]) == 0) {
-                printf("Machine accepted input.\n");
-                return;
-            }
-        }
-    }
-
-    printf("Machine rejected input.\n");
-}
-
 int main(int argc, char** argv) {
 
     TuringMachine* TM = parse_input(fopen(argv[1], "r"));
     Tape* tape = init_tape(16, *TM->blank_symbol, TM->start_state);
     load_input(tape, argv[2]);
     print_tape(tape);
-
-    run_turing_machine(TM, tape);
-
 
     return EXIT_SUCCESS;
 }
