@@ -74,10 +74,6 @@ void move_left(Tape* tape) {
     }
 }
 
-void stay(Tape* tape) {
-    // why did I make this function lol?
-}
-
 void load_input(Tape* tape, const char* input) {
     unsigned long len = strlen(input);
     if (len > tape->capacity) {
@@ -113,8 +109,19 @@ void run_turing_machine(TuringMachine* TM, Tape* tape) {
                 write_symbol(tape, t.write_symbol);
                 tape->cur_state = t.next_state; 
 
-                (t.move == LEFT) ? move_left(tape) :
-                (t.move == RIGHT) ? move_right(tape) : stay(tape);
+                switch (t.move) {
+                case LEFT:
+                    move_left(tape);
+                    break;
+                case RIGHT:
+                    move_right(tape);
+                    break;
+                case STAY:
+                    // well what did you expect?
+                    break;
+                default:
+                    break;
+                }
 
                 matched = true;
                 break;
