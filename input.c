@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define verbose true
+#define VERBOSE true
 
 void print_str_arr(char** strings, unsigned long num_strings) {
     printf("{");
@@ -266,7 +266,7 @@ TuringMachine* parse_input(FILE* fp) {
             free(parsed_line);
         }
 
-        if (verbose) {
+        if (VERBOSE) {
             printf("\n\n");
 
             printf("Loaded the Turing Machine, %s\n", TM->name);
